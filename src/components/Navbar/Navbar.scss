@@ -1,0 +1,156 @@
+@import '../../styles/variables';
+
+.nav {
+  border-right: 5px solid $base-6;
+  overflow-y: auto;
+  display: none !important  ;
+  width: 440px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  padding: 2rem 2rem 2rem 2rem !important;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  transition: left 0.3s ease-in-out;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__container {
+    width: 100%;
+  }
+
+  img {
+    width: 75%;
+  }
+
+  &__header {
+    &-description {
+      margin-left: 1rem;
+      h2 {
+        font-weight: 600;
+        color: $base-4;
+        margin: 0;
+        font-size: 1.6rem;
+      }
+
+      span {
+        font-size: 1.3rem;
+        color: $base-5;
+      }
+    }
+  }
+
+  &__hamburger-container {
+    margin-top: 4rem;
+
+    h2 {
+      text-transform: uppercase;
+      color: $base-4;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+    }
+  }
+
+  &__list {
+    padding: 0;
+    margin-top: 1rem;
+    font-weight: 400;
+
+    &-item {
+      padding: 0;
+      margin-bottom: 1rem;
+      a, .accordion-button {
+        color: $base-4 !important;
+
+        svg {
+          display: inline-block;
+          margin-right: 0.8rem;
+          path {
+            fill: $base-4;
+          }
+        }
+      }
+
+      .accordion-button {
+        padding-left: 1rem !important;
+        background-color: blue;
+      }
+
+      a {
+        display: inline-block;
+        padding: 1rem;
+        width: 100%;
+      }
+
+      a.active {
+        background-color: $primary;
+        color: #fff !important;
+        border-radius: 8px;
+
+        svg {
+          path {
+            fill: #fff;
+            stroke: #fff;
+          }
+
+        }
+      }
+
+      .accordion {
+        margin-bottom: 0;
+        &#accordionCommunity {
+          margin-top: 2.5rem;
+        }
+
+        &-button {
+          background-color: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          padding: 0;
+          outline: yellow;
+        }
+
+        &-body {
+          padding-bottom: 0;
+          padding-right: 0;
+        }
+
+        ul {
+          padding: 0;
+
+          li {
+            padding-left: 0.8rem;
+          }
+
+          li:last-of-type {
+            padding-bottom: 0;
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  &.active-nav {
+    display: block !important;
+  }
+
+  @media screen and (max-width: 992px) {
+    position: fixed !important;
+    z-index: 1;
+    left: 0;
+
+
+    @media screen and (max-width: 440px) {
+      width: 100%;
+    }
+  }
+}

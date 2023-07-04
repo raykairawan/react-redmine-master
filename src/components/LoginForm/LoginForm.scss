@@ -1,0 +1,49 @@
+@import '../../styles/variables';
+
+.login__form {
+  header {
+    margin-bottom: 3rem;
+    img {
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-weight: 400;
+    }
+
+    p {
+      color: $base-4;
+    }
+
+    img {
+      width: 50%;
+    }
+  }
+
+  &-input {
+    input, input:focus {
+      display: inline-block;
+      padding: 1rem;
+      border-color: $base-2 !important;
+      margin-bottom: 1.3rem;
+      background-color: transparent;
+
+      &::placeholder {
+        color: $base-3;
+      }
+    }
+  }
+
+  button {
+    width: 100%;
+    display: inline-block;
+    padding: 1rem;
+    margin-top: 1.3rem;
+    border: none;
+    color: white;
+    background-color: $primary;
+    font-weight: 300;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+}

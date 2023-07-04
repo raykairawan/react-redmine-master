@@ -1,0 +1,45 @@
+@import '../../styles/variables';
+
+.main__header {
+  padding: 1rem 2rem 1rem 0;
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  &-hamburger {
+    border: none;
+    background-color: transparent;
+    padding: 1rem;
+    display: block;
+  }
+
+  &-main {
+    span {
+      display: inline-block;
+      margin-right: 2rem;
+      color: $base-5;
+    }
+
+    .dropdown {
+      button {
+        background-color: transparent;
+        border: none;
+
+        img {
+          display: inline-block;
+          margin-right: 0.7rem;
+        }
+      }
+
+      &-menu {
+        margin-top: 1rem !important;
+        padding: 1rem;
+
+        li {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
