@@ -42,8 +42,8 @@ const LoginForm = ({ onLogin }) => {
 
       if (response.ok) {
         localStorage.setItem('userData', JSON.stringify(responseData));
-        navigate('/');
         onLogin();
+        navigate('/');
       } else {
         setLoginError('Username atau password salah');
       }

@@ -11,16 +11,18 @@ const Header = ({
   onHamburger, isNavbarOpen, user, onLogout,
 }) => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const userData = localStorage.getItem('userData');
-    if (userData) {
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
       setLoggedIn(true);
+      const parsedUserData = JSON.parse(storedUserData);
+      setUserData(parsedUserData);
     }
   }, []);
 
   const handleLogout = () => {
-    // Menghapus data dari localStorage
     localStorage.removeItem('userData');
     setLoggedIn(false);
     onLogout();
@@ -41,12 +43,10 @@ const Header = ({
             <li>Settings</li>
           </ul>
         </div>
-        {!loggedIn && user ? (
+        {loggedIn && user ? (
           <>
-            <span className="d-none d-md-inline-block">{user.login}</span>
-            <button className="button__logout" onClick={handleLogout}>
-              Logout
-            </button>
+            <span className="d-none d-md-inline-block">{userData.username}</span>
+            <button className="button__logout" onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
