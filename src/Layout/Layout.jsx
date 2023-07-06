@@ -12,6 +12,11 @@ const Layout = () => {
     setIsNavbarOpen(!isNavbarOpen);
   };
 
+  const handleLogout = () => {
+    // Logika logout
+    console.log('Logout'); // Contoh logika logout
+  };
+
   return (
     <div className="container-fluid admin__layout">
       <div className="d-flex">
@@ -20,6 +25,8 @@ const Layout = () => {
           <Header
             onHamburger={isNavbarOpenHandler}
             isNavbarOpen={isNavbarOpen}
+            loggedIn
+            onLogout={handleLogout}
           />
           <main>
             <Outlet />
