@@ -5,12 +5,14 @@ import { Buffer } from 'buffer';
 import logoRedmine from '../../assets/images/logo/logoRedmine-med.png';
 
 import './LoginForm.scss';
+import useAuth from '../../store/useAuth';
 
 const LoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,8 +43,11 @@ const LoginForm = ({ onLogin }) => {
       console.log(responseData);
 
       if (response.ok) {
+        localStorage.setItem('infoUser', base64Credentials);
+        localStorage.setItem('permissionUser', username);
         localStorage.setItem('userData', JSON.stringify(responseData));
         onLogin();
+        setAuth(responseData);
         navigate('/');
       } else {
         setLoginError('Username atau password salah');

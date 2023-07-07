@@ -6,10 +6,12 @@ import { HamburgerIcon } from '../../assets/icons';
 import logoRedmine from '../../assets/images/logo/redmine-logo.png';
 
 import './Header.scss';
+import useAuth from '../../store/useAuth';
 
 const Header = ({
   onHamburger, isNavbarOpen, user, onLogout,
 }) => {
+  const { auth, setAuth } = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
 
@@ -24,8 +26,11 @@ const Header = ({
 
   const handleLogout = () => {
     localStorage.removeItem('userData');
+    localStorage.removeItem('permissionUser');
+    localStorage.removeItem('userData');
     setLoggedIn(false);
     onLogout();
+    setAuth(null);
   };
 
   return (
@@ -34,7 +39,7 @@ const Header = ({
         <HamburgerIcon />
       </button>
       <div className="main__header-main d-flex align-items-center ms-auto">
-        <span className="d-none d-md-inline-block">Welcome</span>
+        <span className="d-none d-md-inline-block">{auth.user.firstname}</span>
         <div className="dropdown">
           <button className="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <img src={logoRedmine} alt="logo redmine" width="55px" />
@@ -43,9 +48,9 @@ const Header = ({
             <li>Settings</li>
           </ul>
         </div>
-        {loggedIn && user ? (
+        {auth ? (
           <>
-            <span className="d-none d-md-inline-block">{userData.username}</span>
+            <span className="d-none d-md-inline-block">{auth.user.username}</span>
             <button className="button__logout" onClick={handleLogout}>Logout</button>
           </>
         ) : (

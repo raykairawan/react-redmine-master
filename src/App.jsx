@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Routes, Route, useNavigate, Navigate,
 } from 'react-router-dom';
@@ -13,8 +13,15 @@ import {
   EventCategories,
   Home,
 } from './pages';
+import useAuth from './store/useAuth';
 
 const App = () => {
+  const {
+    auth,
+    isPreload,
+    setIsPreload,
+    setAuth,
+  } = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
   const [isNavbarOpen, setNavbarOpen] = useState(false);
   const navigate = useNavigate();
@@ -33,10 +40,53 @@ const App = () => {
     setNavbarOpen(!isNavbarOpen);
   };
 
+  useEffect(() => {
+    const fetchLoginInfo = async () => {
+      const base64Credentials = localStorage.getItem('infoUser');
+      const username = localStorage.getItem('permissionUser');
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          Authorization: `Basic ${base64Credentials}`,
+          'Content-Type': 'application/json',
+        },
+      };
+
+      let apiUrl = '';
+      if (username === 'admin') {
+        apiUrl = 'http://127.0.0.1:3000/users.json';
+      } else {
+        apiUrl = 'http://127.0.0.1:3000/users/current.json';
+      }
+
+      try {
+        const response = await fetch(apiUrl, requestOptions);
+        const responseData = await response.json();
+
+        setAuth(responseData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsPreload(false);
+      }
+    };
+
+    if (localStorage.getItem('userData')) {
+      fetchLoginInfo();
+    } else {
+      setIsPreload(false);
+    }
+  }, [setAuth, setIsPreload]);
+
+  if (isPreload) {
+    return null;
+  }
+
   return (
     <Routes>
       <Route path="/login" element={<Login loggedIn={handleLogin} />} />
-      {loggedIn ? (
+      {auth ? (
         <Route element={<Layout />}>
           <Route
             element={<Header onHamburger={handleHamburgerClick} isNavbarOpen={isNavbarOpen} loggedIn={loggedIn} onLogout={handleLogout} />}
