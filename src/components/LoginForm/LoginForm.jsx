@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { Buffer } from 'buffer';
+import axios from 'axios';
 import logoRedmine from '../../assets/images/logo/logoRedmine-med.png';
 
 import './LoginForm.scss';
@@ -38,11 +39,11 @@ const LoginForm = ({ onLogin }) => {
     }
 
     try {
-      const response = await fetch(apiUrl, requestOptions);
-      const responseData = await response.json();
+      const response = await axios.get(apiUrl, requestOptions);
+      const responseData = response.data;
       console.log(responseData);
 
-      if (response.ok) {
+      if (response.status === 200) {
         localStorage.setItem('infoUser', base64Credentials);
         localStorage.setItem('permissionUser', username);
         localStorage.setItem('userData', JSON.stringify(responseData));
@@ -53,7 +54,6 @@ const LoginForm = ({ onLogin }) => {
         setLoginError('Username atau password salah');
       }
     } catch (error) {
-      // Tangani kesalahan jaringan atau lainnya
       console.error(error);
       setLoginError('Terjadi kesalahan saat login');
     }

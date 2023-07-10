@@ -39,7 +39,12 @@ const Header = ({
         <HamburgerIcon />
       </button>
       <div className="main__header-main d-flex align-items-center ms-auto">
-        <span className="d-none d-md-inline-block">{auth.user.firstname}</span>
+        {auth && auth.user && auth.user.firstname && (
+        <span className="d-none d-md-inline-block">
+          Welcome,&nbsp;&nbsp;
+          {auth.user.username === 'admin' ? 'admin' : auth.user.firstname}
+        </span>
+        )}
         <div className="dropdown">
           <button className="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <img src={logoRedmine} alt="logo redmine" width="55px" />
@@ -49,10 +54,7 @@ const Header = ({
           </ul>
         </div>
         {auth ? (
-          <>
-            <span className="d-none d-md-inline-block">{auth.user.username}</span>
-            <button className="button__logout" onClick={handleLogout}>Logout</button>
-          </>
+          <button className="button__logout" onClick={handleLogout}>Logout</button>
         ) : (
           <>
             <Link to="/login">
