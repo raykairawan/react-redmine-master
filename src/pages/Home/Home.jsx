@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment';
+import { DateTime } from 'luxon';
+import { Link } from 'react-router-dom';
 
 import useProject from '../../store/useProject';
 import useAuthStore from '../../store/useAuthStore';
@@ -37,7 +38,7 @@ const Home = () => {
         {projects.slice(0, 2).map((project) => (
           <div key={project.id} className="card">
             <div className="card-body">
-              <h2>{project.name}</h2>
+              <h2><Link to={`/projects/${project.id}`}>{project.name}</Link></h2>
               <p>
                 Deskripsi Project :
                 {' '}
@@ -46,7 +47,10 @@ const Home = () => {
               <p>
                 Dibuat tanggal :
                 {' '}
-                {moment(project.created_on).format('DD MMMM YYYY')}
+                {
+                  DateTime.fromISO(project.created_on)
+                    .setLocale('id').toFormat('dd MMMM yyyy')
+                }
               </p>
             </div>
           </div>

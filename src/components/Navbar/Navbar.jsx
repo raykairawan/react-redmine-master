@@ -17,6 +17,8 @@ import {
   UserIcon,
   RolesIcon,
   PermissionIcon,
+  ProjectIcon,
+  SearchAddIcon,
   AppVersionIcon,
 } from '../../assets/icons';
 
@@ -68,8 +70,8 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                       aria-expanded="true"
                       aria-controls="collapseOne"
                     >
-                      <EventIcon />
-                      <span>Event</span>
+                      <ProjectIcon />
+                      <span>Proyek</span>
                     </button>
                   </div>
                   <div
@@ -82,14 +84,14 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                       <ul>
                         <li>
                           <NavLink to="/event/categories">
-                            <EventCategoryIcon />
-                            <span>Kategori Event</span>
+                            <SearchAddIcon />
+                            <span>Cari & Tambah Proyek</span>
                           </NavLink>
                         </li>
                         <li>
                           <NavLink to="/event/lists">
                             <ListEventIcon />
-                            <span>Daftar Event</span>
+                            <span>Semua Proyek</span>
                           </NavLink>
                         </li>
                       </ul>

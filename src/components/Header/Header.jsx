@@ -25,11 +25,10 @@ const Header = ({
   }, []);
 
   const handleLogout = () => {
+    onLogout();
     localStorage.removeItem('userData');
     localStorage.removeItem('permissionUser');
-    localStorage.removeItem('userData');
     setLoggedIn(false);
-    onLogout();
     setAuth(null);
   };
 
