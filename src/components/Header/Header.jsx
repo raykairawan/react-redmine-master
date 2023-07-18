@@ -15,6 +15,15 @@ const Header = ({
   const [loggedIn, setLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
 
+  const handleLogout = () => {
+    onLogout();
+    localStorage.removeItem('userData');
+    localStorage.removeItem('permissionUser');
+    localStorage.removeItem('lastActivity');
+    setLoggedIn(false);
+    setAuth(null);
+  };
+
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
     if (storedUserData) {
@@ -24,13 +33,41 @@ const Header = ({
     }
   }, []);
 
-  const handleLogout = () => {
-    onLogout();
-    localStorage.removeItem('userData');
-    localStorage.removeItem('permissionUser');
-    setLoggedIn(false);
-    setAuth(null);
-  };
+  useEffect(() => {
+    const handleUserActivity = () => {
+      localStorage.setItem('lastActivity', Date.now());
+    };
+
+    document.addEventListener('click', handleUserActivity);
+    document.addEventListener('keypress', handleUserActivity);
+
+    return () => {
+      document.removeEventListener('click', handleUserActivity);
+      document.removeEventListener('keypress', handleUserActivity);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Check if it's time for auto logout
+    const checkAutoLogout = () => {
+      const lastActivity = localStorage.getItem('lastActivity');
+      if (lastActivity) {
+        const lastActivityTime = parseInt(lastActivity, 10);
+        const currentTime = Date.now();
+        const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        if (currentTime - lastActivityTime >= twentyFourHours) {
+          handleLogout();
+        }
+      }
+    };
+
+    const autoLogoutTimer = setTimeout(checkAutoLogout, 24 * 60 * 60 * 1000);
+
+    return () => {
+      clearTimeout(autoLogoutTimer);
+    };
+  }, []);
 
   return (
     <header className="main__header d-flex justify-content-between align-items-center">
