@@ -83,13 +83,13 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                     <div className="accordion-body">
                       <ul>
                         <li>
-                          <NavLink to="/event/categories">
+                          <NavLink to="/projects/categories">
                             <SearchAddIcon />
                             <span>Cari & Tambah Proyek</span>
                           </NavLink>
                         </li>
                         <li>
-                          <NavLink to="/event/lists">
+                          <NavLink to="/projects/lists">
                             <ListEventIcon />
                             <span>Semua Proyek</span>
                           </NavLink>

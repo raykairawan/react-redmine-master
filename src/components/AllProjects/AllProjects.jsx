@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 import useProject from '../../store/useProject';
 import useAuthStore from '../../store/useAuthStore';
 
-import './Home.scss';
+import './AllProjects.scss';
 
-const Home = () => {
+const AllProjects = () => {
   const token = useAuthStore((state) => state.token);
   const { projects, setProjects } = useProject();
 
@@ -32,10 +32,9 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Selamat Datang di Redmine</h1>
       <div className="project-list">
-        <h1>Daftar Proyek Redmine</h1>
-        {projects.length > 0 && projects.slice(0, 2).map((project) => (
+        <h1>Semua Proyek Redmine</h1>
+        {projects.length > 0 && projects.map((project) => (
           <div key={project.id} className="card">
             <div className="card-body">
               <h2><Link to={`/projects/${project.id}`}>{project.name}</Link></h2>
@@ -55,12 +54,9 @@ const Home = () => {
             </div>
           </div>
         ))}
-        {projects.length > 2 && (
-          <Link to="/projects/lists">Lihat Semua Proyek</Link>
-        )}
       </div>
     </div>
   );
 };
 
-export default Home;
+export default AllProjects;

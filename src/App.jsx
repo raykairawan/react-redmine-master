@@ -14,6 +14,7 @@ import {
   Login,
   EventCategories,
   Home,
+  Projects,
 } from './pages';
 import useAuth from './store/useAuth';
 
@@ -95,8 +96,8 @@ const App = () => {
           />
           <Route path="/" element={<Home />} exact />
           <Route path="/projects/:id" element={<ProjectDetail />} />
-          <Route path="/event/categories" element={<EventCategories />} />
-          <Route path="/event/lists" element={<h1>This is event list</h1>} />
+          <Route path="/projects/categories" element={<EventCategories />} />
+          <Route path="/projects/lists" element={<Projects />} />
           <Route path="/community/categories" element={<h1>This is community categories</h1>} />
           <Route path="/community/lists" element={<h1>This is community list</h1>} />
           <Route path="/banner" element={<h1>This is banner</h1>} />
