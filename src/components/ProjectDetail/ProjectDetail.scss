@@ -1,0 +1,52 @@
+/* ProjectDetail.scss */
+@import '../../styles/variables';
+
+/* Container for the entire project detail */
+.project-detail-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  
+    h2 {
+      margin-bottom: 10px;
+    }
+  
+    .tab-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+  
+      li {
+        padding: 10px 20px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #f0f0f0;
+        }
+  
+        &.react-tabs__tab--selected {
+          background-color: #f0f0f0;
+        }
+      }
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  
+      li {
+        margin-bottom: 5px;
+        padding: 5px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+      }
+    }
+}
+  

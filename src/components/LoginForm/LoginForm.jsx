@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Buffer } from 'buffer';
 import axios from 'axios';
 import logoRedmine from '../../assets/images/logo/logoRedmine-med.png';
-
 import './LoginForm.scss';
 import useAuth from '../../store/useAuth';
 
@@ -31,14 +30,8 @@ const LoginForm = ({ onLogin }) => {
       },
     };
 
-    let apiUrl = '';
-    if (username === 'admin') {
-      apiUrl = 'http://127.0.0.1:3000/users.json';
-    } else {
-      apiUrl = 'http://127.0.0.1:3000/users/current.json';
-    }
-
     try {
+      const apiUrl = username === 'admin' ? process.env.REACT_APP_API_ADMIN : process.env.REACT_APP_API_USER;
       const response = await axios.get(apiUrl, requestOptions);
       const responseData = response.data;
       console.log(responseData);

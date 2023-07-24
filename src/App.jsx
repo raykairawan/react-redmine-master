@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Routes, Route, useNavigate, Navigate,
 } from 'react-router-dom';
+import axios from 'axios';
 import Layout from './Layout/Layout';
 import Header from './components/Header/Header';
 import ProjectDetail
@@ -46,7 +47,6 @@ const App = () => {
   useEffect(() => {
     const fetchLoginInfo = async () => {
       const base64Credentials = localStorage.getItem('infoUser');
-      const username = localStorage.getItem('permissionUser');
 
       const requestOptions = {
         method: 'GET',
@@ -56,15 +56,12 @@ const App = () => {
         },
       };
 
-      let apiUrl = '';
-      if (username === 'admin') {
-        apiUrl = 'http://127.0.0.1:3000/users.json';
-      } else {
-        apiUrl = 'http://127.0.0.1:3000/users/current.json';
-      }
-
       try {
-        const response = await fetch(apiUrl, requestOptions);
+        const response = await axios.get(
+          process.env.REACT_APP_API_USER,
+          {},
+          requestOptions,
+        );
         const responseData = await response.json();
 
         setAuth(responseData);

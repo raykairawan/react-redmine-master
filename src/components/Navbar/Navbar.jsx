@@ -82,12 +82,12 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                   >
                     <div className="accordion-body">
                       <ul>
-                        <li>
+                        {/* <li>
                           <NavLink to="/projects/categories">
                             <SearchAddIcon />
                             <span>Cari & Tambah Proyek</span>
                           </NavLink>
-                        </li>
+                        </li> */}
                         <li>
                           <NavLink to="/projects/lists">
                             <ListEventIcon />
@@ -142,7 +142,7 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                 </div>
               </div>
             </li>
-            <li className="nav__list-item">
+            {/* <li className="nav__list-item">
               <NavLink to="/banner">
                 <BannerIcon />
                 <span>Banner</span>
@@ -159,7 +159,7 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                 <RolesIcon />
                 <span>Roles</span>
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav__list-item">
               <NavLink to="/Permission">
                 <PermissionIcon />
