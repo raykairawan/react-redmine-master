@@ -13,7 +13,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import {
   Login,
-  EventCategories,
+  ProjectList,
   Home,
   Projects,
 } from './pages';
@@ -93,7 +93,7 @@ const App = () => {
           />
           <Route path="/" element={<Home />} exact />
           <Route path="/projects/:id" element={<ProjectDetail />} />
-          <Route path="/projects/categories" element={<EventCategories />} />
+          <Route path="/projects/categories" element={<ProjectList />} />
           <Route path="/projects/lists" element={<Projects />} />
           <Route path="/community/categories" element={<h1>This is community categories</h1>} />
           <Route path="/community/lists" element={<h1>This is community list</h1>} />

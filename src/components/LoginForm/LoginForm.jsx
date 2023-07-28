@@ -43,8 +43,10 @@ const LoginForm = ({ onLogin }) => {
         onLogin();
         setAuth(responseData);
         navigate('/');
-      } else {
+      } else if (response.status === 401) {
         setLoginError('Username atau password salah');
+      } else {
+        setLoginError('Terjadi kesalahan saat login');
       }
     } catch (error) {
       console.error(error);

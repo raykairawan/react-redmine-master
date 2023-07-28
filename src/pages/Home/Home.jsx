@@ -34,32 +34,28 @@ const Home = () => {
     fetchProjects();
   }, [token, setProjects]);
 
-  const renderProjectCard = (project) => (
-    <div key={project.id} className="card">
-      <div className="card-body">
-        <h2>
-          <Link to={`/projects/${project.id}`}>{project.name}</Link>
-        </h2>
-        <p>
-          Deskripsi Project:
-          {' '}
-          {project.description}
-        </p>
-        <p>
-          Dibuat tanggal:
-          {' '}
-          {formatDate(project.created_on)}
-        </p>
-      </div>
-    </div>
-  );
-
   return (
     <div>
       <h1>Selamat Datang di Redmine</h1>
       <div className="project-list">
         <h1>Daftar Proyek Redmine</h1>
-        {projects.slice(0, 2).map(renderProjectCard)}
+        {projects.length > 0 && projects.slice(0, 2).map((project) => (
+          <div key={project.id} className="card">
+            <div className="card-body">
+              <h2><Link to={`/projects/${project.id}`}>{project.name}</Link></h2>
+              <p>
+                Deskripsi Project :
+                {' '}
+                {project.description}
+              </p>
+              <p>
+                Dibuat tanggal:
+                {' '}
+                {formatDate(project.created_on)}
+              </p>
+            </div>
+          </div>
+        ))}
         {projects.length > 2 && (
           <Link to="/projects/lists">Lihat Semua Proyek</Link>
         )}

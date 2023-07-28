@@ -82,12 +82,12 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                   >
                     <div className="accordion-body">
                       <ul>
-                        {/* <li>
+                        <li>
                           <NavLink to="/projects/categories">
                             <SearchAddIcon />
                             <span>Cari & Tambah Proyek</span>
                           </NavLink>
-                        </li> */}
+                        </li>
                         <li>
                           <NavLink to="/projects/lists">
                             <ListEventIcon />

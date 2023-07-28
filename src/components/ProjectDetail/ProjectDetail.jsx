@@ -7,6 +7,7 @@ import {
 import 'react-tabs/style/react-tabs.css';
 import useProject from '../../store/useProject';
 import useIssues from '../../store/useIssues';
+import useAuthStore from '../../store/useAuthStore';
 import './ProjectDetail.scss';
 
 const ProjectDetail = () => {
@@ -14,17 +15,64 @@ const ProjectDetail = () => {
   const projectId = id;
   const { projects, setProjects } = useProject();
   const {
-    queueIssues, doingIssues, verifiedIssues, doneIssues,
-    setQueueIssues, setDoingIssues, setVerifiedIssues, setDoneIssues,
+    queueIssues, doingIssues, verifiedIssues, doneIssues, selectedStatus,
+    setQueueIssues, setDoingIssues, setVerifiedIssues, setDoneIssues, setSelectedStatus,
   } = useIssues();
 
   const renderIssueList = (issues, category) => {
+    const handleMoveTo = async (issueId, targetStatusId) => {
+      try {
+        await axios.put(`http://127.0.0.1:3000/issues/${issueId}.json`, { issue: { status_id: targetStatusId } });
+        const issueToMove = issues.find((issue) => issue.id === issueId);
+
+        if (!issueToMove) {
+          console.error(`Issue with id ${issueId} not found.`);
+          return;
+        }
+
+        const updatedIssueList = issues.map((issue) => (issue.id === issueId ? { ...issue, status_id: targetStatusId } : issue));
+
+        switch (category) {
+          case 'Queue':
+            setQueueIssues(updatedIssueList);
+            break;
+          case 'Doing':
+            setDoingIssues(updatedIssueList);
+            break;
+          case 'Verified':
+            setVerifiedIssues(updatedIssueList);
+            break;
+          case 'Done':
+            setDoneIssues(updatedIssueList);
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.error('Error while moving issue:', error);
+      }
+    };
+
     return (
       <TabPanel>
         {issues.length ? (
           <ul>
             {issues.map((issue) => (
-              <li key={issue.id}>{issue.subject}</li>
+              <li key={issue.id}>
+                {issue.subject}
+                <div>
+                  <button onClick={() => handleMoveTo(issue.id, selectedStatus)}>Move to</button>
+                  <select
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
+                    <option value="Queue">Queue</option>
+                    <option value="Doing">Doing</option>
+                    <option value="Verified">Verified</option>
+                    <option value="Done">Done</option>
+                  </select>
+                </div>
+              </li>
             ))}
           </ul>
         ) : (
@@ -63,8 +111,6 @@ const ProjectDetail = () => {
             status: { ...issue.status, name: statusMapping[issue.status.name] || issue.status.name },
           }))
           : [];
-
-        console.log('Categorized Issues:', categorizedIssues);
 
         // Update the state with the categorized issues
         setQueueIssues(categorizedIssues.filter((issue) => issue.status.name === 'Queue'));
