@@ -59,7 +59,7 @@ const App = () => {
 
       try {
         const response = await axios.get(
-          process.env.REACT_APP_API_USER,
+          'http://redmine.pptik.id/users/current.json',
           {},
           requestOptions,
         );

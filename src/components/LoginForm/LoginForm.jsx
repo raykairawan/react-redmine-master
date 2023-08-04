@@ -31,7 +31,7 @@ const LoginForm = ({ onLogin }) => {
     };
 
     try {
-      const apiUrl = username === 'admin' ? process.env.REACT_APP_API_ADMIN : process.env.REACT_APP_API_USER;
+      const apiUrl = username === 'admin' ? 'http://redmine.pptik.id/users.json' : 'http://redmine.pptik.id/users/current.json';
       const response = await axios.get(apiUrl, requestOptions);
       const responseData = response.data;
       console.log(responseData);

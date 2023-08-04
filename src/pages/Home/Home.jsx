@@ -19,7 +19,7 @@ const Home = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_API_ALLPROJECTS, {
+        const response = await axios.get('http://redmine.pptik.id/projects.json', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

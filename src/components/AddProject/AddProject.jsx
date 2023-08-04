@@ -48,7 +48,7 @@ const AddProject = () => {
       },
     };
 
-    axios.post('http://127.0.0.1:3000/projects.json', newProject, addAuthorizationHeader())
+    axios.post('http://redmine.pptik.id/projects.json', newProject, addAuthorizationHeader())
       .then((response) => {
         if (response.data && response.data.project) {
           navigate('/projects/lists');

@@ -1,38 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import useSearchStore from '../../store/useSearchStore';
 import { SearchIcon } from '../../assets/icons';
 
 import './SearchInput.scss';
 
 const SearchInput = ({ placeHolderName }) => {
-  const handleSearch = async (event) => {
-    event.preventDefault();
-    const searchTerm = event.target.value.trim();
-    if (searchTerm) {
-      try {
-        const response = await axios.get(`/search.json?query=${searchTerm}`);
-        // Process the response data as needed
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+  const {
+    searchQuery, setSearchQuery, searchResults, setSearchResults,
+  } = useSearchStore();
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`/projects/autocomplete.js?jump=issues&q=${searchQuery}`);
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
     }
   };
 
   return (
     <div className="search__input">
-      <form className="search__input-form">
+      <form className="search__input-form" onSubmit={handleSearch}>
         <input
           className="form-control"
           placeholder={placeHolderName}
           type="text"
-          onChange={handleSearch}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button>
           <SearchIcon />
         </button>
       </form>
+      <ul>
+        {searchResults.map((result) => (
+          <li key={result.id}>{result.name}</li>
+        ))}
+      </ul>
     </div>
   );
 };

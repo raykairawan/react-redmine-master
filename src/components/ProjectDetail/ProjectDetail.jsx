@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -13,6 +13,7 @@ import './ProjectDetail.scss';
 const ProjectDetail = () => {
   const { id } = useParams();
   const projectId = id;
+  const [isProjectDeleted, setIsProjectDeleted] = useState(false);
   const { projects, setProjects } = useProject();
   const {
     queueIssues, doingIssues, verifiedIssues, doneIssues, selectedStatus, isLoading,
@@ -60,7 +61,7 @@ const ProjectDetail = () => {
         }
 
         const response = await axios.put(
-          `http://127.0.0.1:3000/issues/${issueId}.json`,
+          `http://redmine.pptik.id/issues/${issueId}.json`,
           { issue: { status_id: newStatus } },
           {
             headers: {
@@ -146,12 +147,12 @@ const ProjectDetail = () => {
           return;
         }
 
-        const response = await axios.get(`http://127.0.0.1:3000/projects/${projectId}.json`);
+        const response = await axios.get(`http://redmine.pptik.id/projects/${projectId}.json`);
         const projectData = response.data.project;
         logger.debug('Project API response:', response.data);
         setProjects(projectData);
 
-        const issuesResponse = await axios.get(`http://127.0.0.1:3000/projects/${projectId}/issues.json`);
+        const issuesResponse = await axios.get(`http://redmine.pptik.id/projects/${projectId}/issues.json`);
         const issuesData = issuesResponse.data.issues;
         logger.debug('Issues API response:', issuesResponse.data);
 
@@ -178,10 +179,46 @@ const ProjectDetail = () => {
     fetchProject();
   }, [projectId, setProjects, setQueueIssues, setDoingIssues, setVerifiedIssues, setDoneIssues]);
 
+  const handleEditProject = () => {
+    navigate(`/projects/edit/${projectId}`);
+  };
+
+  const handleDeleteProject = async () => {
+    try {
+      const infoUser = localStorage.getItem('infoUser');
+      if (!infoUser) {
+        navigate('/login');
+        console.error('User not authenticated. Redirect to login page.');
+        return;
+      }
+
+      const response = await axios.delete(
+        `http://redmine.pptik.id/projects/${projectId}.json`,
+      );
+
+      if (response.status === 204) {
+        setIsProjectDeleted(true);
+      }
+    } catch (error) {
+      console.error('Error while deleting project:', error);
+    }
+  };
+
+  if (isProjectDeleted) {
+    return (
+      <div>
+        <p>Proyek telah dihapus.</p>
+        <button onClick={() => navigate('/projects/lists')}>Kembali ke Daftar Proyek</button>
+      </div>
+    );
+  }
+
   return (
     <div className="project-detail-container">
       <h2>{projects.name}</h2>
       <p>{projects.description}</p>
+      <button onClick={handleEditProject}>Edit Project</button>
+      <button onClick={handleDeleteProject}>Delete Project</button>
       <Tabs>
         <TabList className="tab-list">
           <Tab>Queue</Tab>
