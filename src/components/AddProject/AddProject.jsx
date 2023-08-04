@@ -1,69 +1,112 @@
 import React from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import useProjectStore from '../../store/useProjectStore';
-import useAuthStore from '../../store/useAuthStore';
+import logger from '../../log/logger';
 
 import './AddProject.scss';
 
+const addAuthorizationHeader = () => {
+  const infoUser = localStorage.getItem('infoUser');
+  if (infoUser) {
+    return {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${infoUser}`,
+      },
+    };
+  }
+  return {};
+};
+
 const AddProject = () => {
-  const projectData = useProjectStore();
-  const { token } = useAuthStore();
+  const {
+    projectName,
+    projectDescription,
+    projectIdentifier,
+    isPublic,
+    projectModule,
+    setProjectName,
+    setProjectDescription,
+    setProjectIdentifier,
+    setIsPublic,
+    setProjectModule,
+    resetForm,
+  } = useProjectStore();
+  const navigate = useNavigate();
 
-  const createProject = () => {
-    const apiUrl = process.env.REACT_APP_API_ALLPROJECTS;
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
 
-    const requestData = {
+    const newProject = {
       project: {
-        name: projectData.name,
-        identifier: projectData.identifier,
-        description: projectData.description,
-        is_public: projectData.is_public,
+        name: projectName,
+        description: projectDescription,
+        identifier: projectIdentifier,
+        is_public: isPublic,
+        project_module: projectModule,
       },
     };
 
-    axios.post(apiUrl, requestData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    axios.post('http://127.0.0.1:3000/projects.json', newProject, addAuthorizationHeader())
       .then((response) => {
-        console.log('Project created successfully!', response.data);
-        projectData.resetProjectData();
+        if (response.data && response.data.project) {
+          navigate('/projects/lists');
+        }
       })
       .catch((error) => {
-        console.error('Error creating project:', error);
+        logger.error('Error while add projects', error);
       });
+
+    resetForm();
   };
 
+  const moduleOptions = [
+    'boards',
+    'calendar',
+    'documents',
+    'files',
+    'gantt',
+    'issue_tracking',
+    'news',
+    'repository',
+    'time_tracking',
+    'wiki',
+  ];
+
   return (
-    <div className="add-project-container">
-      <h2>Add Project</h2>
-      <input
-        type="text"
-        value={projectData.name}
-        onChange={(e) => projectData.setProjectName(e.target.value)}
-        placeholder="Project Name"
-      />
-      <input
-        type="text"
-        value={projectData.identifier}
-        onChange={(e) => projectData.setProjectIdentifier(e.target.value)}
-        placeholder="Project Identifier"
-      />
-      <textarea
-        value={projectData.description}
-        onChange={(e) => projectData.setProjectDescription(e.target.value)}
-        placeholder="Project Description"
-      />
-      <label>
-        Public Project:
-        <input
-          type="checkbox"
-          checked={projectData.is_public}
-          onChange={(e) => projectData.setProjectIsPublic(e.target.checked)}
-        />
-      </label>
-      <button onClick={createProject}>Create Project</button>
+    <div className="add-project-page">
+      <h2>Tambah Proyek Baru</h2>
+      <form onSubmit={handleFormSubmit}>
+        <label>
+          Nama Proyek:
+          <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+        </label>
+        <label>
+          Deskripsi Proyek:
+          <textarea value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)} />
+        </label>
+        <label>
+          Identifier Proyek:
+          <input type="text" value={projectIdentifier} onChange={(e) => setProjectIdentifier(e.target.value)} />
+        </label>
+        <label>
+          Proyek Publik:
+          <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
+        </label>
+        <label>
+          Modul Proyek:
+          <select value={projectModule} onChange={(e) => setProjectModule(e.target.value)}>
+            <option value="">Pilih Modul</option>
+            {moduleOptions.map((module) => (
+              <option key={module} value={module}>
+                {module}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button type="submit">Tambah Proyek</button>
+      </form>
     </div>
   );
 };

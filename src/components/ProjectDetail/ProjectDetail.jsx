@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Tab, TabList, TabPanel, Tabs,
 } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import useProject from '../../store/useProject';
 import useIssues from '../../store/useIssues';
-import useAuthStore from '../../store/useAuthStore';
+import logger from '../../log/logger';
 import './ProjectDetail.scss';
 
 const ProjectDetail = () => {
@@ -15,41 +15,88 @@ const ProjectDetail = () => {
   const projectId = id;
   const { projects, setProjects } = useProject();
   const {
-    queueIssues, doingIssues, verifiedIssues, doneIssues, selectedStatus,
-    setQueueIssues, setDoingIssues, setVerifiedIssues, setDoneIssues, setSelectedStatus,
+    queueIssues, doingIssues, verifiedIssues, doneIssues, selectedStatus, isLoading,
+    setIsLoading, setQueueIssues, setDoingIssues, setVerifiedIssues, setDoneIssues, setSelectedStatus,
   } = useIssues();
+  const navigate = useNavigate();
+
+  axios.interceptors.request.use((config) => {
+    const infoUser = localStorage.getItem('infoUser');
+    if (infoUser) {
+      // eslint-disable-next-line no-param-reassign
+      config = {
+        ...config,
+        headers: {
+          ...config.headers,
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${infoUser}`,
+        },
+      };
+    }
+    return config;
+  });
+
+  const statusMapping = {
+    Baru: 'Queue',
+    'Dalam proses': 'Doing',
+    'Umpan balik': 'Verified',
+    Resolved: 'Done',
+    'To Do': 'Queue',
+    Closed: 'Done',
+  };
 
   const renderIssueList = (issues, category) => {
-    const handleMoveTo = async (issueId, targetStatusId) => {
+    const handleMoveTo = async (issueId, newStatus) => {
       try {
-        await axios.put(`http://127.0.0.1:3000/issues/${issueId}.json`, { issue: { status_id: targetStatusId } });
-        const issueToMove = issues.find((issue) => issue.id === issueId);
+        logger.info('Move button clicked for issueId:', issueId);
+        logger.debug('New status selected:', newStatus);
 
-        if (!issueToMove) {
-          console.error(`Issue with id ${issueId} not found.`);
+        setIsLoading(true);
+        const infoUser = localStorage.getItem('infoUser');
+        if (!infoUser) {
+          navigate('/login');
+          console.error('User not authenticated. Redirect to login page.');
           return;
         }
 
-        const updatedIssueList = issues.map((issue) => (issue.id === issueId ? { ...issue, status_id: targetStatusId } : issue));
+        const response = await axios.put(
+          `http://127.0.0.1:3000/issues/${issueId}.json`,
+          { issue: { status_id: newStatus } },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Basic ${infoUser}`,
+            },
+          },
+        );
 
-        switch (category) {
-          case 'Queue':
-            setQueueIssues(updatedIssueList);
-            break;
-          case 'Doing':
-            setDoingIssues(updatedIssueList);
-            break;
-          case 'Verified':
-            setVerifiedIssues(updatedIssueList);
-            break;
-          case 'Done':
-            setDoneIssues(updatedIssueList);
-            break;
-          default:
-            break;
+        if (response.status === 200) {
+          const updatedIssueIndex = issues.findIndex((issue) => issue.id === issueId);
+          if (updatedIssueIndex !== -1) {
+            const updatedIssues = [...issues];
+            updatedIssues[updatedIssueIndex].status.name = statusMapping[newStatus] || newStatus;
+            switch (category) {
+              case 'Queue':
+                setQueueIssues(updatedIssues);
+                break;
+              case 'Doing':
+                setDoingIssues(updatedIssues);
+                break;
+              case 'Verified':
+                setVerifiedIssues(updatedIssues);
+                break;
+              case 'Done':
+                setDoneIssues(updatedIssues);
+                break;
+              default:
+                break;
+            }
+          }
+          setIsLoading(false);
         }
       } catch (error) {
-        console.error('Error while moving issue:', error);
+        logger.error('Error while moving issue:', error);
+        setIsLoading(false);
       }
     };
 
@@ -66,10 +113,10 @@ const ProjectDetail = () => {
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
                   >
-                    <option value="Queue">Queue</option>
-                    <option value="Doing">Doing</option>
-                    <option value="Verified">Verified</option>
-                    <option value="Done">Done</option>
+                    <option value="1">Queue</option>
+                    <option value="2">Doing</option>
+                    <option value="4">Verified</option>
+                    <option value="3">Done</option>
                   </select>
                 </div>
               </li>
@@ -87,23 +134,29 @@ const ProjectDetail = () => {
   };
 
   useEffect(() => {
+    logger.info('ProjectDetail component mounted');
+    logger.debug('projectId changed:', projectId);
+
     const fetchProject = async () => {
       try {
+        const infoUser = localStorage.getItem('infoUser');
+        if (!infoUser) {
+          navigate('/login');
+          console.error('User not authenticated. Redirect to login page.');
+          return;
+        }
+
         const response = await axios.get(`http://127.0.0.1:3000/projects/${projectId}.json`);
         const projectData = response.data.project;
+        logger.debug('Project API response:', response.data);
         setProjects(projectData);
 
         const issuesResponse = await axios.get(`http://127.0.0.1:3000/projects/${projectId}/issues.json`);
         const issuesData = issuesResponse.data.issues;
+        logger.debug('Issues API response:', issuesResponse.data);
 
-        const statusMapping = {
-          Baru: 'Queue',
-          'Dalam proses': 'Doing',
-          'Umpan balik': 'Verified',
-          Resolved: 'Done',
-          'To Do': 'Queue',
-          Closed: 'Done',
-        };
+        logger.debug('Project data fetched:', projectData);
+        logger.debug('Issues data fetched:', issuesData);
 
         const categorizedIssues = Array.isArray(issuesData)
           ? issuesData.map((issue) => ({

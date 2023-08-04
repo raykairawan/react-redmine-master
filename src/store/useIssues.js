@@ -6,6 +6,8 @@ const useIssues = create((set) => ({
   verifiedIssues: [],
   doneIssues: [],
   selectedStatus: 'Queue',
+  isLoading: false,
+  setIsLoading: (isLoading) => set({ isLoading }),
   setQueueIssues: (data) => set({ queueIssues: data }),
   setDoingIssues: (data) => set({ doingIssues: data }),
   setVerifiedIssues: (data) => set({ verifiedIssues: data }),
