@@ -61,7 +61,7 @@ const ProjectDetail = () => {
         }
 
         const response = await axios.put(
-          `http://redmine.pptik.id/issues/${issueId}.json`,
+          `http://127.0.0.1:3000/issues/${issueId}.json`,
           { issue: { status_id: newStatus } },
           {
             headers: {
@@ -94,6 +94,7 @@ const ProjectDetail = () => {
             }
           }
           setIsLoading(false);
+          window.location.reload();
         }
       } catch (error) {
         logger.error('Error while moving issue:', error);
@@ -147,12 +148,12 @@ const ProjectDetail = () => {
           return;
         }
 
-        const response = await axios.get(`http://redmine.pptik.id/projects/${projectId}.json`);
+        const response = await axios.get(`http://127.0.0.1:3000/projects/${projectId}.json`);
         const projectData = response.data.project;
         logger.debug('Project API response:', response.data);
         setProjects(projectData);
 
-        const issuesResponse = await axios.get(`http://redmine.pptik.id/projects/${projectId}/issues.json`);
+        const issuesResponse = await axios.get(`http://127.0.0.1:3000/projects/${projectId}/issues.json`);
         const issuesData = issuesResponse.data.issues;
         logger.debug('Issues API response:', issuesResponse.data);
 
@@ -193,7 +194,7 @@ const ProjectDetail = () => {
       }
 
       const response = await axios.delete(
-        `http://redmine.pptik.id/projects/${projectId}.json`,
+        `http://127.0.0.1:3000/projects/${projectId}.json`,
       );
 
       if (response.status === 204) {

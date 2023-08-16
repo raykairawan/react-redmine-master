@@ -8,6 +8,7 @@ import Header from './components/Header/Header';
 import ProjectDetail
   from './components/ProjectDetail/ProjectDetail';
 import AddProject from './components/AddProject/AddProject';
+import EditProject from './components/EditProject/EditProject';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -59,7 +60,7 @@ const App = () => {
 
       try {
         const response = await axios.get(
-          'http://redmine.pptik.id/users/current.json',
+          'http://127.0.0.1:3000/users/current.json',
           {},
           requestOptions,
         );
@@ -84,6 +85,8 @@ const App = () => {
     return null;
   }
 
+  console.log(auth);
+
   return (
     <Routes>
       <Route path="/login" element={<Login loggedIn={handleLogin} />} />
@@ -95,6 +98,7 @@ const App = () => {
           <Route path="/" element={<Home />} exact />
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/projects/add" element={<AddProject />} />
+          <Route path="/projects/edit/:id" element={<EditProject />} />
           <Route path="/projects/categories" element={<ProjectList />} />
           <Route path="/projects/lists" element={<Projects />} />
           <Route path="/community/categories" element={<h1>This is community categories</h1>} />
