@@ -61,7 +61,7 @@ const App = () => {
 
       try {
         const response = await axios.get(
-          'http://127.0.0.1:3000/users/current.json',
+          process.env.REACT_APP_API_USER,
           {},
           requestOptions,
         );
@@ -76,16 +76,11 @@ const App = () => {
     };
 
     if (localStorage.getItem('userData')) {
+      fetchLoginInfo();
       setAuth(JSON.parse(localStorage.getItem('userData')));
       setIsPreload(false);
     }
   }, [setAuth, setIsPreload]);
-
-  if (isPreload) {
-    return null;
-  }
-
-  console.log(auth);
 
   return (
     <Routes>

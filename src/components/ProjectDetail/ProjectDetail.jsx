@@ -72,7 +72,7 @@ const ProjectDetail = () => {
         }
 
         const response = await axios.put(
-          `http://127.0.0.1:3000/issues/${issueId}.json`,
+          `${process.env.REACT_APP_API_BASE_URL}/issues/${issueId}.json`,
           { issue: { status_id: newStatus } },
           {
             headers: {
@@ -159,12 +159,16 @@ const ProjectDetail = () => {
           return;
         }
 
-        const response = await axios.get(`http://127.0.0.1:3000/projects/${projectId}.json`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}.json`,
+        );
         const projectData = response.data.project;
         logger.debug('Project API response:', response.data);
         setProjects(projectData);
 
-        const issuesResponse = await axios.get(`http://127.0.0.1:3000/projects/${projectId}/issues.json`);
+        const issuesResponse = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}/issues.json`,
+        );
         const issuesData = issuesResponse.data.issues;
         logger.debug('Issues API response:', issuesResponse.data);
 
@@ -206,7 +210,7 @@ const ProjectDetail = () => {
       }
 
       const response = await axios.delete(
-        `http://127.0.0.1:3000/projects/${projectId}.json`,
+        `${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}.json`,
       );
 
       if (response.status === 204) {

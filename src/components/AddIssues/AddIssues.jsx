@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import useIssueStore from '../../store/useIssueStore';
@@ -14,7 +13,7 @@ const AddIssues = () => {
   useEffect(() => {
     const fetchTrackers = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:3000/trackers.json');
+        const response = await axios.get(process.env.REACT_APP_API_TRACKER);
         const { trackers } = response.data;
         issueStore.setField('trackers', trackers);
       } catch (error) {
@@ -24,7 +23,7 @@ const AddIssues = () => {
 
     const fetchPriorities = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:3000/enumerations/issue_priorities.json');
+        const response = await axios.get(process.env.REACT_APP_API_PRIORITIES);
         const priorities = response.data.issue_priorities;
         issueStore.setField('priorities', priorities);
       } catch (error) {
@@ -34,7 +33,7 @@ const AddIssues = () => {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:3000/users.json');
+        const response = await axios.get(process.env.REACT_APP_API_ADMIN);
         const { users } = response.data;
         issueStore.setField('users', users);
       } catch (error) {
@@ -64,7 +63,7 @@ const AddIssues = () => {
       }
 
       const response = await axios.post(
-        `http://127.0.0.1:3000/projects/${projectId}/issues.json`,
+        `${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}/issues.json`,
         {
           issue: {
             project_id: projectId,

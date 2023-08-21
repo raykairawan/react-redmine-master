@@ -28,7 +28,7 @@ const EditProject = () => {
           return;
         }
 
-        const response = await axios.get(`http://127.0.0.1:3000/projects/${projectId}.json`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}.json`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Basic ${infoUser}`,
@@ -71,7 +71,7 @@ const EditProject = () => {
       };
 
       const response = await axios.put(
-        `http://127.0.0.1:3000/projects/${projectId}.json`,
+        `${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}.json`,
         { project: updatedProjectData },
         {
           headers: {

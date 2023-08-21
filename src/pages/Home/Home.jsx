@@ -19,7 +19,7 @@ const Home = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:3000/projects.json', {
+        const response = await axios.get(process.env.REACT_APP_API_PROJECTS, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

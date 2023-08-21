@@ -31,7 +31,7 @@ const LoginForm = ({ onLogin }) => {
     };
 
     try {
-      const apiUrl = username === 'admin' ? 'http://127.0.0.1:3000/users.json' : 'http://127.0.0.1:3000/users/current.json';
+      const apiUrl = username === 'admin' ? process.env.REACT_APP_API_ADMIN : process.env.REACT_APP_API_USER;
       const response = await axios.get(apiUrl, requestOptions);
       const responseData = response.data;
       console.log(responseData);
