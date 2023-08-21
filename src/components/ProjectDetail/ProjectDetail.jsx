@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   Tab, TabList, TabPanel, Tabs,
 } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import useProject from '../../store/useProject';
 import useIssues from '../../store/useIssues';
 import logger from '../../log/logger';
@@ -14,6 +16,7 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const projectId = id;
   const [isProjectDeleted, setIsProjectDeleted] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const { projects, setProjects } = useProject();
   const {
     queueIssues, doingIssues, verifiedIssues, doneIssues, selectedStatus, isLoading,
@@ -46,6 +49,14 @@ const ProjectDetail = () => {
     Closed: 'Done',
   };
 
+  const showDeleteAlert = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const hideDeleteAlert = () => {
+    setShowDeleteConfirmation(false);
+  };
+
   const renderIssueList = (issues, category) => {
     const handleMoveTo = async (issueId, newStatus) => {
       try {
@@ -71,7 +82,7 @@ const ProjectDetail = () => {
           },
         );
 
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 204) {
           const updatedIssueIndex = issues.findIndex((issue) => issue.id === issueId);
           if (updatedIssueIndex !== -1) {
             const updatedIssues = [...issues];
@@ -185,6 +196,7 @@ const ProjectDetail = () => {
   };
 
   const handleDeleteProject = async () => {
+    showDeleteAlert();
     try {
       const infoUser = localStorage.getItem('infoUser');
       if (!infoUser) {
@@ -216,10 +228,34 @@ const ProjectDetail = () => {
 
   return (
     <div className="project-detail-container">
-      <h2>{projects.name}</h2>
+      {showDeleteConfirmation && (
+      <div className="delete-confirmation">
+        <p>Are you sure you want to delete this project?</p>
+        <button className="confirm-button" onClick={handleDeleteProject}>
+          Confirm Delete
+        </button>
+        <button className="cancel-button" onClick={hideDeleteAlert}>
+          Cancel
+        </button>
+      </div>
+      )}
+      <div className="project-header">
+        <h2>{projects.name}</h2>
+        <div className="action-buttons">
+          <button className="icon-button" onClick={handleEditProject}>
+            <FontAwesomeIcon icon={faEdit} />
+            Edit
+          </button>
+          <button className="icon-button" onClick={handleDeleteProject}>
+            <FontAwesomeIcon icon={faTrashAlt} />
+            Delete
+          </button>
+        </div>
+      </div>
       <p>{projects.description}</p>
-      <button onClick={handleEditProject}>Edit Project</button>
-      <button onClick={handleDeleteProject}>Delete Project</button>
+      <Link to={`/projects/${projectId}/add/issues`} className="add-issue-button">
+        Add New Issue
+      </Link>
       <Tabs>
         <TabList className="tab-list">
           <Tab>Queue</Tab>

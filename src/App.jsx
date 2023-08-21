@@ -9,6 +9,7 @@ import ProjectDetail
   from './components/ProjectDetail/ProjectDetail';
 import AddProject from './components/AddProject/AddProject';
 import EditProject from './components/EditProject/EditProject';
+import AddIssues from './components/AddIssues/AddIssues';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -75,8 +76,7 @@ const App = () => {
     };
 
     if (localStorage.getItem('userData')) {
-      fetchLoginInfo();
-    } else {
+      setAuth(JSON.parse(localStorage.getItem('userData')));
       setIsPreload(false);
     }
   }, [setAuth, setIsPreload]);
@@ -101,6 +101,7 @@ const App = () => {
           <Route path="/projects/edit/:id" element={<EditProject />} />
           <Route path="/projects/categories" element={<ProjectList />} />
           <Route path="/projects/lists" element={<Projects />} />
+          <Route path="/projects/:projectId/add/issues" element={<AddIssues />} />
           <Route path="/community/categories" element={<h1>This is community categories</h1>} />
           <Route path="/community/lists" element={<h1>This is community list</h1>} />
           <Route path="/banner" element={<h1>This is banner</h1>} />
