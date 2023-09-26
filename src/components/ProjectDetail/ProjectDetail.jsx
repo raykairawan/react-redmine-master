@@ -16,6 +16,7 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const projectId = id;
   const [isProjectDeleted, setIsProjectDeleted] = useState(false);
+  const [isIssueDeleted, setIsIssueDeleted] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const { projects, setProjects } = useProject();
   const {
@@ -45,7 +46,6 @@ const ProjectDetail = () => {
     'Dalam proses': 'Doing',
     'Umpan balik': 'Verified',
     Resolved: 'Done',
-    'To Do': 'Queue',
     Closed: 'Done',
   };
 
@@ -113,6 +113,48 @@ const ProjectDetail = () => {
       }
     };
 
+    const handleEditIssue = (issueId) => {
+    };
+
+    const handleDeleteIssue = async (issueId) => {
+      // eslint-disable-next-line no-alert
+      const confirmDelete = window.confirm('Are you sure you want to delete this issue?');
+
+      if (!confirmDelete) {
+        return;
+      }
+
+      try {
+        const infoUser = localStorage.getItem('infoUser');
+        if (!infoUser) {
+          navigate('/login');
+          console.error('User not authenticated. Redirect to login page.');
+          return;
+        }
+
+        const response = await axios.delete(
+          `${process.env.REACT_APP_API_BASE_URL}/issues/${issueId}.json`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Basic ${infoUser}`,
+            },
+          },
+        );
+
+        if (response.status === 204) {
+          console.log(`Issue ${issueId} has been deleted.`);
+          setIsIssueDeleted(true);
+        }
+      } catch (error) {
+        console.error(`Error while deleting issue ${issueId}:`, error);
+      }
+    };
+
+    if (isIssueDeleted) {
+      window.location.reload();
+    }
+
     return (
       <TabPanel>
         {issues.length ? (
@@ -131,6 +173,21 @@ const ProjectDetail = () => {
                     <option value="4">Verified</option>
                     <option value="3">Done</option>
                   </select>
+                </div>
+                <div>
+                  <button onClick={() => handleEditIssue(issue.id)}>Edit</button>
+                  <button onClick={() => handleDeleteIssue(issue.id)}>Delete</button>
+                  {showDeleteConfirmation === issue.id && (
+                  <div className="delete-confirmation">
+                    <p>Are you sure you want to delete this issue?</p>
+                    <button className="confirm-button" onClick={() => handleDeleteIssue(issue.id)}>
+                      Confirm Delete
+                    </button>
+                    <button className="cancel-button" onClick={() => setShowDeleteConfirmation(null)}>
+                      Cancel
+                    </button>
+                  </div>
+                  )}
                 </div>
               </li>
             ))}
@@ -230,6 +287,17 @@ const ProjectDetail = () => {
     );
   }
 
+  const userInfo = {
+    username: 'admin',
+  };
+
+  localStorage.setItem('infoUser', JSON.stringify(userInfo));
+  const infoUserJSON = localStorage.getItem('infoUser');
+  const infoUser = infoUserJSON ? JSON.parse(infoUserJSON) : null;
+
+  const isAdmin = infoUser && infoUser.username && infoUser.username.toLowerCase() === 'admin';
+  console.log(isAdmin);
+
   return (
     <div className="project-detail-container">
       {showDeleteConfirmation && (
@@ -246,14 +314,18 @@ const ProjectDetail = () => {
       <div className="project-header">
         <h2>{projects.name}</h2>
         <div className="action-buttons">
-          <button className="icon-button" onClick={handleEditProject}>
-            <FontAwesomeIcon icon={faEdit} />
-            Edit
-          </button>
-          <button className="icon-button" onClick={handleDeleteProject}>
-            <FontAwesomeIcon icon={faTrashAlt} />
-            Delete
-          </button>
+          {isAdmin && (
+          <>
+            <button className="icon-button" onClick={handleEditProject}>
+              <FontAwesomeIcon icon={faEdit} />
+              Edit
+            </button>
+            <button className="icon-button" onClick={handleDeleteProject}>
+              <FontAwesomeIcon icon={faTrashAlt} />
+              Delete
+            </button>
+          </>
+          )}
         </div>
       </div>
       <p>{projects.description}</p>

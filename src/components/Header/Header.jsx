@@ -17,11 +17,19 @@ const Header = ({
 
   const handleLogout = () => {
     onLogout();
-    localStorage.removeItem('userData');
-    localStorage.removeItem('permissionUser');
-    localStorage.removeItem('lastActivity');
     setLoggedIn(false);
     setAuth(null);
+    // Clear cookies
+    document.cookie.split(';').forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, '')
+        .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+    });
+
+    // Clear local storage
+    localStorage.clear();
+
+    window.location.href = '/login';
   };
 
   useEffect(() => {
@@ -48,7 +56,6 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-    // Check if it's time for auto logout
     const checkAutoLogout = () => {
       const lastActivity = localStorage.getItem('lastActivity');
       if (lastActivity) {
