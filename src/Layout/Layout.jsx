@@ -13,8 +13,7 @@ const Layout = () => {
   };
 
   const handleLogout = () => {
-    // Logika logout
-    console.log('Logout'); // Contoh logika logout
+    console.log('Logout');
   };
 
   return (

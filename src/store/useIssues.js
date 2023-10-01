@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 
 const useIssues = create((set) => ({
+  issues: [],
   queueIssues: [],
   doingIssues: [],
   verifiedIssues: [],
   doneIssues: [],
   selectedStatus: 'Queue',
   isLoading: false,
+  setIssues: (newIssues) => set({ issues: newIssues }),
   setIsLoading: (isLoading) => set({ isLoading }),
   setQueueIssues: (data) => set({ queueIssues: data }),
   setDoingIssues: (data) => set({ doingIssues: data }),

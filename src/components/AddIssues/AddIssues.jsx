@@ -33,7 +33,7 @@ const AddIssues = () => {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(process.env.REACT_APP_API_ADMIN);
+        const response = await axios.get(process.env.REACT_APP_API_USER);
         const { users } = response.data;
         issueStore.setField('users', users);
       } catch (error) {

@@ -9,15 +9,18 @@ import ProjectDetail
   from './components/ProjectDetail/ProjectDetail';
 import AddProject from './components/AddProject/AddProject';
 import EditProject from './components/EditProject/EditProject';
+import IssuesDetail from './components/IssuesDetail/IssuesDetail';
 import AddIssues from './components/AddIssues/AddIssues';
+import EditIssues from './components/EditIssues/EditIssues';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import {
   Login,
-  ProjectList,
   Home,
+  Issues,
+  ProjectList,
   Projects,
 } from './pages';
 import useAuth from './store/useAuth';
@@ -65,7 +68,7 @@ const App = () => {
           {},
           requestOptions,
         );
-        const responseData = await response.json();
+        const responseData = response.data;
 
         setAuth(responseData);
       } catch (error) {
@@ -96,7 +99,10 @@ const App = () => {
           <Route path="/projects/edit/:id" element={<EditProject />} />
           <Route path="/projects/categories" element={<ProjectList />} />
           <Route path="/projects/lists" element={<Projects />} />
+          <Route path="/projects/:projectId/issues/:issueId" element={<IssuesDetail />} />
+          <Route path="/projects/:projectId/issues/lists" element={<Issues />} />
           <Route path="/projects/:projectId/add/issues" element={<AddIssues />} />
+          <Route path="/projects/:projectId/issues/:issueId/edit" element={<EditIssues />} />
           <Route path="/community/categories" element={<h1>This is community categories</h1>} />
           <Route path="/community/lists" element={<h1>This is community list</h1>} />
           <Route path="/banner" element={<h1>This is banner</h1>} />

@@ -101,69 +101,9 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
               </div>
             </li>
             <li className="nav__list-item">
-              <div className="accordion accordion-flush" id="accordionCommunity">
-                <div className="accordion-item">
-                  <div className="accordion-header" id="headingTwo">
-                    <button
-                      className="accordion-button"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseTwo"
-                      aria-expanded="true"
-                      aria-controls="collapseTwo"
-                    >
-                      <CommunityIcon />
-                      <span>Komunitas</span>
-                    </button>
-                  </div>
-                  <div
-                    id="collapseTwo"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="headingTwo"
-                    data-bs-parent="#accordionCommunity"
-                  >
-                    <div className="accordion-body">
-                      <ul>
-                        <li>
-                          <NavLink to="/community/categories">
-                            <CommunityCategoryIcon />
-                            <span>Kategori Komunitas</span>
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink to="/community/lists">
-                            <ListCommunityIcon />
-                            <span>Daftar Komunitas</span>
-                          </NavLink>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-            {/* <li className="nav__list-item">
-              <NavLink to="/banner">
-                <BannerIcon />
-                <span>Banner</span>
-              </NavLink>
-            </li>
-            <li className="nav__list-item">
-              <NavLink to="/users">
-                <UserIcon />
-                <span>User</span>
-              </NavLink>
-            </li>
-            <li className="nav__list-item">
-              <NavLink to="/Roles">
-                <RolesIcon />
-                <span>Roles</span>
-              </NavLink>
-            </li> */}
-            <li className="nav__list-item">
-              <NavLink to="/Permission">
+              <NavLink to="/projects/:projectId/issues/lists">
                 <PermissionIcon />
-                <span>Permission</span>
+                <span>Issues</span>
               </NavLink>
             </li>
             <li className="nav__list-item">

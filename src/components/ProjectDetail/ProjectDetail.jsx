@@ -114,6 +114,7 @@ const ProjectDetail = () => {
     };
 
     const handleEditIssue = (issueId) => {
+      navigate(`/projects/${projectId}/issues/${issueId}/edit`);
     };
 
     const handleDeleteIssue = async (issueId) => {
@@ -160,8 +161,8 @@ const ProjectDetail = () => {
         {issues.length ? (
           <ul>
             {issues.map((issue) => (
-              <li key={issue.id}>
-                {issue.subject}
+              <li key={issue}>
+                <Link to={`/projects/${projectId}/issues/${issue.id}`}>{issue.subject}</Link>
                 <div>
                   <button onClick={() => handleMoveTo(issue.id, selectedStatus)}>Move to</button>
                   <select
@@ -287,16 +288,7 @@ const ProjectDetail = () => {
     );
   }
 
-  const userInfo = {
-    username: 'admin',
-  };
-
-  localStorage.setItem('infoUser', JSON.stringify(userInfo));
-  const infoUserJSON = localStorage.getItem('infoUser');
-  const infoUser = infoUserJSON ? JSON.parse(infoUserJSON) : null;
-
-  const isAdmin = infoUser && infoUser.username && infoUser.username.toLowerCase() === 'admin';
-  console.log(isAdmin);
+  const isAdmin = JSON.parse(localStorage.getItem('userData')).user.login === 'admin';
 
   return (
     <div className="project-detail-container">
