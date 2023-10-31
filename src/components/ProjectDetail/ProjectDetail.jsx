@@ -6,7 +6,7 @@ import {
 } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import useProject from '../../store/useProject';
 import useIssues from '../../store/useIssues';
 import logger from '../../log/logger';
@@ -42,9 +42,9 @@ const ProjectDetail = () => {
   });
 
   const statusMapping = {
-    Baru: 'Queue',
-    'Dalam proses': 'Doing',
-    'Umpan balik': 'Verified',
+    New: 'Queue',
+    'In Progress': 'Doing',
+    Feedback: 'Verified',
     Resolved: 'Done',
     Closed: 'Done',
   };
@@ -204,6 +204,14 @@ const ProjectDetail = () => {
     );
   };
 
+  const createNewBoard = async () => {
+    navigate(`/projects/${projectId}/boards`);
+  };
+
+  const handleMemberProject = () => {
+    navigate(`/projects/${projectId}/memberships`);
+  };
+
   useEffect(() => {
     logger.info('ProjectDetail component mounted');
     logger.debug('projectId changed:', projectId);
@@ -316,6 +324,10 @@ const ProjectDetail = () => {
               <FontAwesomeIcon icon={faTrashAlt} />
               Delete
             </button>
+            <button className="icon-button" onClick={handleMemberProject}>
+              <FontAwesomeIcon icon={faUser} />
+              Member
+            </button>
           </>
           )}
         </div>
@@ -336,6 +348,10 @@ const ProjectDetail = () => {
         {renderIssueList(verifiedIssues, 'Verified')}
         {renderIssueList(doneIssues, 'Done')}
       </Tabs>
+      {isAdmin && (
+      <button onClick={createNewBoard}>Buat Board Baru</button>
+      )}
+      <h3>Boards:</h3>
     </div>
   );
 };

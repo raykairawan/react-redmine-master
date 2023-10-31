@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import useIssueStore from '../../store/useIssueStore'; // Pastikan mengganti path sesuai dengan struktur folder Anda
+import useIssueStore from '../../store/useIssueStore';
 import './EditIssues.scss';
 
 const EditIssues = () => {
@@ -20,7 +20,7 @@ const EditIssues = () => {
         }
 
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}/issues/${issueId}.json`,
+          `${process.env.REACT_APP_API_BASE_URL}/issues/${issueId}.json`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const EditIssues = () => {
         return;
       }
       const response = await axios.put(
-        `${process.env.REACT_APP_API_BASE_URL}/projects/${projectId}/issues/${issueId}.json`,
+        `${process.env.REACT_APP_API_BASE_URL}/issues/${issueId}.json`,
         {
           issue: {
             tracker: issueStore.tracker,

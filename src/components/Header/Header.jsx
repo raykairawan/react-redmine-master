@@ -93,7 +93,8 @@ const Header = ({
             <img src={logoRedmine} alt="logo redmine" width="55px" />
           </button>
           <ul className="dropdown-menu">
-            <li>Settings</li>
+            <li><Link to="/my/account">My Account</Link></li>
+            <li><Link to="/my/password">Change Password</Link></li>
           </ul>
         </div>
         {auth ? (

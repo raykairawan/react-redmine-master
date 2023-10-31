@@ -1,0 +1,49 @@
+/* ProjectMembers.scss */
+
+.project-members-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .project-members-container h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .project-members-container input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .project-members-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .project-members-container li {
+    margin: 10px 0;
+  }
+  
+  .project-members-container label {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .project-members-container label input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .project-members-container button {
+    padding: 5px 10px;
+    background-color: #0077b6;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .project-members-container button:hover {
+    background-color: #005aa7;
+  }
+  

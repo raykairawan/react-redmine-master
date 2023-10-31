@@ -7,15 +7,7 @@ import {
   LeftArrowIcon,
   RightArrowIcon,
   DashboardIcon,
-  EventIcon,
-  EventCategoryIcon,
   ListEventIcon,
-  CommunityIcon,
-  CommunityCategoryIcon,
-  ListCommunityIcon,
-  BannerIcon,
-  UserIcon,
-  RolesIcon,
   PermissionIcon,
   ProjectIcon,
   SearchAddIcon,
@@ -25,6 +17,7 @@ import {
 import './Navbar.scss';
 
 const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
+  const isAdmin = JSON.parse(localStorage.getItem('userData')).user.login === 'admin';
   return (
     <nav className={isNavbarOpen ? 'nav active-nav' : 'nav'}>
       <div className="nav__container align-items-center">
@@ -82,12 +75,14 @@ const Navbar = ({ onNavbarIsOpen, isNavbarOpen }) => {
                   >
                     <div className="accordion-body">
                       <ul>
+                        {isAdmin && (
                         <li>
                           <NavLink to="/projects/categories">
                             <SearchAddIcon />
                             <span>Cari & Tambah Proyek</span>
                           </NavLink>
                         </li>
+                        )}
                         <li>
                           <NavLink to="/projects/lists">
                             <ListEventIcon />
